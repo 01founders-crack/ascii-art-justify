@@ -34,7 +34,7 @@ func main() {
 			// max Len Of Ascii Art Array Horizontal
 			maxLenOfAscii := returnMaxLenOfAscii(abc)
 
-			abc2 := returnSpaceSplit2dAsciiArr(textFromOutside, asciiTemplates)
+			//abc2 := returnSpaceSplit2dAsciiArr(textFromOutside, asciiTemplates)
 			// lenOfAsciiArtHorizontal := lenOfAsciiArtWithoutSpace(abc2)
 			lenOfAsciiArtHorizontalWSpc := lenOfAsciiArtWithSpace(abc)
 
@@ -45,7 +45,11 @@ func main() {
 			}
 			lenOfTerminal := returnTerminalCols() - 2
 
-			lenOfWords := len(abc2)
+			//lenOfWords := len(abc2)
+
+			abc3 := returnWSpaceSplit2dAsciiArr(textFromOutside,asciiTemplates)
+			lenOfWordsabc3 := len(abc3)
+
 			alignType := os.Args[1]
 			if checkArgs1(alignType) {
 				if lenOfTerminal <= lenOfAsciiArtHorizontalWSpc {
@@ -62,7 +66,7 @@ func main() {
 						// center
 						printAlignCenter(abc, lenOfTerminal)
 					} else if alignType == "justify" {
-						printAlignJustify(abc2, lenOfWords, lenOfTerminal, lenOfAsciiArtHorizontalWSpc, len(textFromOutside))
+						printAlignJustify(abc3, lenOfWordsabc3, lenOfTerminal, lenOfAsciiArtHorizontalWSpc, len(textFromOutside))
 					}
 				} // if lenOfTerminal <= lenOfAsciiArtHorizontalWSpc
 			} else {
@@ -113,6 +117,52 @@ func lenOfAsciiArtWithoutSpace(abc2 [][]string) int {
 	}
 	return temp1count
 }
+
+func returnWSpaceSplit2dAsciiArr(text string, asciiTemplates [][]string) [][]string {
+	/*
+		if ends w \n it gonna print println $
+		if you can see text after \n chec;
+		before \n
+		if yes  println $
+		if no println
+	*/
+
+	/*
+	   func to uses printMultipleCharacters print whole stringfrom outside
+	*/
+	// Split the input string into an array of strings
+	// split the line into words if there is a "\r\n" symbol
+	var asciiStringArray [][]string
+	// substrings := returnstring2EndlineArray(text)
+	substrings := strings.Split(text, " ")
+	lenOfsubstrings := len(substrings)
+	for index, v := range substrings {
+		var tempasciiStrArr []string
+		if v == "\\n" {
+			var tempStringAddStr string
+			// If it is last one
+			if index == lenOfsubstrings-1 {
+				// tempStringAddStr = tempStringAddStr + fmt.Sprintln("")
+			} else if index == 0 {
+				// tempStringAddStr = tempStringAddStr + fmt.Sprintln("") // no idea CHECK IT POTENTIAL ERROR
+			} else {
+				if substrings[index-1] == "\\n" {
+					// tempStringAddStr = tempStringAddStr + fmt.Sprintln("")
+				} else {
+					// "Hello\nWorld"
+				}
+			}
+			tempasciiStrArr = append(tempasciiStrArr, tempStringAddStr)
+
+		} else {
+			tempasciiStrArr = append(tempasciiStrArr, printMultipleCharacter(v, asciiTemplates)...)
+		}
+		asciiStringArray = append(asciiStringArray, tempasciiStrArr)
+	}
+
+	return asciiStringArray
+}
+
 
 func returnSpaceSplit2dAsciiArr(text string, asciiTemplates [][]string) [][]string {
 	/*
@@ -228,7 +278,7 @@ func printAlignJustify(abc2 [][]string, lenOfWords, lenOfTerminal, lenOfAsciiArt
 				for k := 0; k < minSpaces; k++ {
 					fmt.Print(" ")
 				}
-
+				fmt.Print("      ")
 				// Add extra spaces if available.
 				if extraSpaces > 0 {
 					fmt.Print(" ")
